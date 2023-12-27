@@ -1,71 +1,51 @@
 package com.nikozka.app.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "products")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String entryDate;
-    private String itemCode;
-    private String itemName;
-    private String itemQuantity;
-    private String status;
 
+    @Setter
+    @Getter
+    @Column(name = "entry_date")
+    private LocalDate entryDate;
+
+    @Setter
+    @Getter
+    @Column(name = "item_code")
+    private String itemCode;
+
+    @Setter
+    @Getter
+    @Column(name = "item_name")
+    private String itemName;
+
+    @Setter
+    @Getter
+    @Column(name = "item_quantity")
+    private String itemQuantity;
+
+    @Setter
+    @Getter
+    @Column(name = "status")
+    private String status;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(String entryDate, String itemCode, String itemName, String itemQuantity, String status) {
+    public ProductEntity(LocalDate entryDate, String itemCode, String itemName, String itemQuantity, String status) {
         this.entryDate = entryDate;
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
-        this.status = status;
-    }
-
-
-    public String getEntryDate() {
-        return entryDate;
-    }
-
-    public void setEntryDate(String entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public void setItemQuantity(String itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
     }
 }

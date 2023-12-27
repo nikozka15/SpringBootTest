@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-public class UserEntityTableCreation {
+public class UserTableCreation {
     @PersistenceContext
     private EntityManager entityManager;
 

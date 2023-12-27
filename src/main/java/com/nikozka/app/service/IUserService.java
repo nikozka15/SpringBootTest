@@ -1,7 +1,7 @@
 package com.nikozka.app.service;
 
-import com.nikozka.app.entity.UserEntity;
+import com.nikozka.app.dto.UserDTO;
 
 public interface IUserService {
-    void saveUser(UserEntity userEntity);
+    void saveUser(UserDTO userDTO);
 }
