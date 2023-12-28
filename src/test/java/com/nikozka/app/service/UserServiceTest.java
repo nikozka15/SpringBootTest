@@ -31,10 +31,10 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-
     @Test
     void saveUserTestSuccessful() {
         UserDTO userDTO = new UserDTO("testUser", "testPassword");
+        doNothing().when(userEntityTableCreation).createTableIfNotExists();
         when(passwordEncoder.encode("testPassword")).thenReturn("hashedPassword");
         when(userRepository.saveAndFlush(any(UserEntity.class))).thenReturn(new UserEntity());
 
@@ -47,6 +47,7 @@ class UserServiceTest {
     @Test
     void saveUserTestUserNotSavedException() {
         UserDTO userDTO = new UserDTO("testUser", "testPassword");
+        doNothing().when(userEntityTableCreation).createTableIfNotExists();
         when(passwordEncoder.encode("testPassword")).thenReturn("hashedPassword");
         when(userRepository.saveAndFlush(any(UserEntity.class))).thenReturn(null);
 

@@ -37,6 +37,7 @@ public class ProductService {
             productRepository.saveAndFlush(convertToEntity(product));
         }
     }
+
     private ProductDTO convertToDTO(ProductEntity product) {
         return modelMapper.map(product, ProductDTO.class);
     }
@@ -45,7 +46,6 @@ public class ProductService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try {
             LocalDate entryDate = LocalDate.parse(product.getEntryDate(), formatter);
-
             ProductEntity productEntity = modelMapper.map(product, ProductEntity.class);
             productEntity.setEntryDate(entryDate);
             return productEntity;
@@ -53,5 +53,4 @@ public class ProductService {
             throw new DateNotParsedException("Incorrect date value. Expected format: dd-MM-yyyy");
         }
     }
-
 }
