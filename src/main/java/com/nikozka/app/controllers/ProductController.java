@@ -27,10 +27,10 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addProductTable(@RequestBody @Valid TableRequest request) {
+    public ResponseEntity<Void> addProduct(@RequestBody @Valid TableRequest request) {
         String tableName = request.getTable();
         List<ProductDTO> records = request.getRecords();
-        productService.saveDynamicTable(tableName, records);
+        productService.save(tableName, records);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

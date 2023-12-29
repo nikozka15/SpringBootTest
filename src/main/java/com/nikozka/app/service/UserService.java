@@ -2,7 +2,8 @@ package com.nikozka.app.service;
 
 import com.nikozka.app.dto.UserDTO;
 import com.nikozka.app.entity.UserEntity;
-import com.nikozka.app.exceptions.UserNotSavedException;
+import com.nikozka.app.exceptions.UserAlreadyExistException;
+import com.nikozka.app.exceptions.SaveOperationFailed;
 import com.nikozka.app.repository.UserRepository;
 import com.nikozka.app.utils.UserTableCreation;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,17 @@ public class UserService implements IUserService {
     @Override
     public void saveUser(UserDTO userDTO) {
         userEntityTableCreation.createTableIfNotExists();
+        if(userRepository.findByUsername(userDTO.getUsername()) != null){
+            throw new UserAlreadyExistException("A user with the specified username already exists");
+        }
         String username = userDTO.getUsername();
         String password = userDTO.getPassword();
 
         String encryptedPassword = passwordEncoder.encode(password);
         UserEntity userEntity = new UserEntity(username, encryptedPassword);
 
-        if (userRepository.saveAndFlush(userEntity) == null) {
-            throw new UserNotSavedException("Error while saving user");
+        if (userRepository.saveAndFlush(userEntity) == null) {           // todo
+            throw new SaveOperationFailed("Error while saving user");
         }
     }
 }

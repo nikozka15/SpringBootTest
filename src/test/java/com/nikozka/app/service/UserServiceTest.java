@@ -2,7 +2,7 @@ package com.nikozka.app.service;
 
 import com.nikozka.app.dto.UserDTO;
 import com.nikozka.app.entity.UserEntity;
-import com.nikozka.app.exceptions.UserNotSavedException;
+import com.nikozka.app.exceptions.SaveOperationFailed;
 import com.nikozka.app.repository.UserRepository;
 import com.nikozka.app.utils.UserTableCreation;
 import org.junit.jupiter.api.Test;
@@ -51,6 +51,6 @@ class UserServiceTest {
         when(passwordEncoder.encode("testPassword")).thenReturn("hashedPassword");
         when(userRepository.saveAndFlush(any(UserEntity.class))).thenReturn(null);
 
-        assertThrows(UserNotSavedException.class, () -> userService.saveUser(userDTO));
+        assertThrows(SaveOperationFailed.class, () -> userService.saveUser(userDTO));
     }
 }

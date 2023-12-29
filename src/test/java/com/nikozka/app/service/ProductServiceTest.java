@@ -4,7 +4,7 @@ import com.nikozka.app.dto.ProductDTO;
 import com.nikozka.app.entity.ProductEntity;
 import com.nikozka.app.exceptions.DateNotParsedException;
 import com.nikozka.app.repository.ProductRepository;
-import com.nikozka.app.utils.ProductTableCreation;
+import com.nikozka.app.utils.ProductTableHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +20,17 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -35,7 +42,7 @@ class ProductServiceTest {
     private ModelMapper modelMapper;
 
     @Mock
-    private ProductTableCreation productTableCreation;
+    private ProductTableHandler productTableHandler;
 
     @InjectMocks
     private ProductService productService;
@@ -43,14 +50,17 @@ class ProductServiceTest {
     @Test
     void getAllProductsTestSuccess() {
         Pageable pageable = Pageable.unpaged();
-        Page<ProductEntity> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+        Page<ProductEntity> emptyPage = new PageImpl<>(List.of(getEntity()), pageable, 1);
 
         when(productRepository.findAll(pageable)).thenReturn(emptyPage);
+        when(modelMapper.map(any(ProductEntity.class), eq(ProductDTO.class))).thenReturn(mock(ProductDTO.class));
 
         List<ProductDTO> result = productService.getAllProducts(pageable);
 
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertAll(
+                () -> assertNotNull(result),
+                () -> assertFalse(result.isEmpty())
+        );
     }
 
     @Test
@@ -61,13 +71,13 @@ class ProductServiceTest {
 
         ArgumentCaptor<ProductEntity> argumentCaptor = ArgumentCaptor.forClass(ProductEntity.class);
 
-        doNothing().when(productTableCreation).createTableIfNotExists(tableName);
+        doNothing().when(productTableHandler).createTableIfNotExists(tableName);
         when(productRepository.saveAndFlush(argumentCaptor.capture())).thenReturn(getEntity());
         when(modelMapper.map(any(), eq(ProductEntity.class))).thenReturn(getEntity());
 
-        productService.saveDynamicTable(tableName, records);
+        productService.save(tableName, records);
 
-        verify(productTableCreation, times(1)).createTableIfNotExists(tableName);
+        verify(productTableHandler, times(1)).createTableIfNotExists(tableName);
         verify(productRepository, times(1)).saveAndFlush(any());
 
         ProductEntity capturedArgument = argumentCaptor.getValue();
@@ -84,11 +94,11 @@ class ProductServiceTest {
         ProductDTO productDTO = new ProductDTO("incorrect", "123", "Test Item", "10", "Paid");
         List<ProductDTO> records = List.of(productDTO);
 
-        doNothing().when(productTableCreation).createTableIfNotExists(tableName);
+        doNothing().when(productTableHandler).createTableIfNotExists(tableName);
 
-        assertThrows(DateNotParsedException.class, () -> productService.saveDynamicTable(tableName, records));
+        assertThrows(DateNotParsedException.class, () -> productService.save(tableName, records));
 
-        verify(productTableCreation, times(1)).createTableIfNotExists(tableName);
+        verify(productTableHandler, times(1)).createTableIfNotExists(tableName);
         verify(productRepository, times(0)).saveAndFlush(any());
     }
 

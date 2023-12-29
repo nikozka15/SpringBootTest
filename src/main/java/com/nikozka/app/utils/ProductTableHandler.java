@@ -1,12 +1,18 @@
 package com.nikozka.app.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-public class ProductTableCreation {
+public class ProductTableHandler {
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;  // todo
 
     @Transactional
     public void createTableIfNotExists(String tableName) {
@@ -20,5 +26,13 @@ public class ProductTableCreation {
                 ");";
 
         entityManager.createNativeQuery(createTableQuery).executeUpdate();
+    }
+    public boolean isTableNotExists(String tableName) {
+
+        String sql = "SELECT COUNT(*) FROM information_schema.tables WHERE UPPER(table_name) = UPPER(?)";
+
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, tableName);
+
+        return count <= 0;
     }
 }

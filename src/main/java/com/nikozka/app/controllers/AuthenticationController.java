@@ -2,6 +2,7 @@ package com.nikozka.app.controllers;
 
 import com.nikozka.app.config.JwtUtils;
 import com.nikozka.app.dto.AuthenticationRequest;
+import com.nikozka.app.dto.AuthenticationResponseToken;
 import com.nikozka.app.dto.UserDTO;
 import com.nikozka.app.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +37,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(@RequestBody @Valid AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponseToken> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        return ResponseEntity.ok(jwtUtils.generateToken(userDetails));
+        return ResponseEntity.ok(new AuthenticationResponseToken(jwtUtils.generateToken(userDetails)));
     }
 }
