@@ -1,7 +1,6 @@
 package com.nikozka.app.controllers;
 
 import com.nikozka.app.exceptions.DateNotParsedException;
-import com.nikozka.app.exceptions.SaveOperationFailed;
 import com.nikozka.app.exceptions.TableNotExistException;
 import com.nikozka.app.exceptions.UserAlreadyExistException;
 import com.nikozka.app.exceptions.UserNotFoundException;
@@ -43,12 +42,6 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
                 .collect(Collectors.joining(", "));
 
         return new ResponseEntity<>(new ErrorResponse(errorMessages), status);
-    }
-
-    @ExceptionHandler(SaveOperationFailed.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleNotSavedException(SaveOperationFailed ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(DateNotParsedException.class)

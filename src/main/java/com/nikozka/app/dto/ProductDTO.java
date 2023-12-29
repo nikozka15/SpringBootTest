@@ -12,10 +12,6 @@ import javax.validation.constraints.Size;
 @Getter
 public class ProductDTO {
     @NotNull(message = "Entry date cannot be null")
-//    @Pattern(
-//            regexp = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})$",
-//            message = "Invalid date format. Use dd-MM-yyyy."
-//    )
     private String entryDate;
 
     @NotNull(message = "Item code cannot be null")

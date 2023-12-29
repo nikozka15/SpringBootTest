@@ -28,5 +28,4 @@ public class UserEntity {
         this.username = username;
         this.password = password;
     }
-
 }

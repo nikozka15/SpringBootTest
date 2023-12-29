@@ -3,7 +3,6 @@ package com.nikozka.app.service;
 import com.nikozka.app.dto.UserDTO;
 import com.nikozka.app.entity.UserEntity;
 import com.nikozka.app.exceptions.UserAlreadyExistException;
-import com.nikozka.app.exceptions.SaveOperationFailed;
 import com.nikozka.app.repository.UserRepository;
 import com.nikozka.app.utils.UserTableCreation;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,6 @@ public class UserService implements IUserService {
         String encryptedPassword = passwordEncoder.encode(password);
         UserEntity userEntity = new UserEntity(username, encryptedPassword);
 
-        if (userRepository.saveAndFlush(userEntity) == null) {           // todo
-            throw new SaveOperationFailed("Error while saving user");
-        }
+        userRepository.saveAndFlush(userEntity);
     }
 }

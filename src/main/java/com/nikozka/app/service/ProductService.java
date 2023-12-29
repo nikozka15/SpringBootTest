@@ -3,7 +3,6 @@ package com.nikozka.app.service;
 import com.nikozka.app.dto.ProductDTO;
 import com.nikozka.app.entity.ProductEntity;
 import com.nikozka.app.exceptions.DateNotParsedException;
-import com.nikozka.app.exceptions.SaveOperationFailed;
 import com.nikozka.app.exceptions.TableNotExistException;
 import com.nikozka.app.repository.ProductRepository;
 import com.nikozka.app.utils.ProductTableHandler;
@@ -28,7 +27,7 @@ public class ProductService {
     private final ProductTableHandler productTableHandler;
 
     public List<ProductDTO> getAllProducts(Pageable pageable) {
-        if (productTableHandler.isTableNotExists("products")) { // tableName is hardcoded
+        if (productTableHandler.isTableNotExists("products")) {
             throw new TableNotExistException("Before requesting all products execute POST /products/add ");
         }
         Page<ProductEntity> userPage = productRepository.findAll(pageable);
@@ -39,9 +38,8 @@ public class ProductService {
     public void save(String tableName, List<ProductDTO> records) {
         productTableHandler.createTableIfNotExists(tableName);
         for (ProductDTO product : records) {
-            if (productRepository.saveAndFlush(convertToEntity(product)) == null) {
-                throw new SaveOperationFailed("Error while saving product");
-            }
+            productRepository.saveAndFlush(convertToEntity(product));
+
         }
     }
 

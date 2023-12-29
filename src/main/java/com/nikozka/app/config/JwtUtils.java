@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtils {
 
-    private String jwtSigningKey = "secret";
+    private final String jwtSigningKey = "secret";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -23,11 +23,6 @@ public class JwtUtils {
 
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
-    }
-
-    public boolean hasClaim(String token, String claimName) {
-        final Claims claims = extractAllClaims(token);
-        return claims.get(claimName) != null;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -42,12 +37,9 @@ public class JwtUtils {
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
+
     public String generateToken(UserDetails userDetails) {
         HashMap<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails);
-    }
-
-    public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
         return createToken(claims, userDetails);
     }
 

@@ -74,7 +74,7 @@ class ProductIntegrationTests {
         mvc.perform(MockMvcRequestBuilders.post("/products/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createInvalidTableRequestJson()))
-                .andExpect(MockMvcResultMatchers.status().isForbidden());  // todo forbidden passed bc was no authentication
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test

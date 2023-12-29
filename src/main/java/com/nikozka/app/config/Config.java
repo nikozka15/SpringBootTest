@@ -1,6 +1,5 @@
 package com.nikozka.app.config;
 
-import com.nikozka.app.utils.ProductTableHandler;
 import com.nikozka.app.utils.UserTableCreation;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +18,4 @@ public class Config {
         return new UserTableCreation();
     }
 
-    @Bean
-    public ProductTableHandler productTableCreation() {
-        return new ProductTableHandler();
-    }
 }
