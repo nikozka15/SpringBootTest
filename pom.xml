@@ -6,10 +6,10 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.14</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.nikozka.app</groupId>
-    <artifactId>SpringSecurity</artifactId>
+    <artifactId>SpringBootTest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SpringSecurity</name>
     <description>SpringSecurity</description>

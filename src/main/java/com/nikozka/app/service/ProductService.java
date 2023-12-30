@@ -39,7 +39,6 @@ public class ProductService {
         productTableHandler.createTableIfNotExists(tableName);
         for (ProductDTO product : records) {
             productRepository.saveAndFlush(convertToEntity(product));
-
         }
     }
 
